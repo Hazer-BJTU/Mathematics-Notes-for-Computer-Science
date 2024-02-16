@@ -1,0 +1,148 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{lmodern}
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+
+\geometry{a4paper,scale=0.75} %设置页边距
+
+\title{\Huge{Mathematics Notes} \\ \huge{for} \\ \Huge{Computer Science} \\ \Huge{Information Technology}}
+\author{\Large Hazer-BJTU}
+\date{\Large 2024 / 2 / 16}
+
+\begin{document}
+\maketitle
+\newpage
+\tableofcontents %生成目录
+\newpage
+
+\CTEXsetup[format={\Large\bfseries}]{section} %设置段落标题左对齐
+
+\section{深度学习中的线性代数/概率论}
+
+\subsection{多元函数微分}
+考虑定义在$\mathbb{R}^n$上的函数$f$，其输出为一个向量$\mathbf{y}\in \mathbb{R}^m$，如果存在线性函数$L$，使得：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            f(\mathbf{x}+\mathbf{h})=f(\mathbf{x})+L(\mathbf{h})+O\left (\left \| \mathbf{h} \right \|_2\right )
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+其中线性函数$L$满足：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &L(\mathbf{x}+\mathbf{y})=L(\mathbf{x})+L(\mathbf{y}) \\
+            &L(\lambda \cdot \mathbf x)=\lambda \cdot L(\mathbf x), \lambda \in \mathbb{R}
+            \nonumber 
+        \end{aligned}
+    \end{equation}
+\end{large}
+那么我们就认为该函数$f$是\textbf{可微的}，一般来说，我们可以将线性函数$L$简单理解为线性变换，如果我们限制函数$f$的输出为一个实数$y\in\mathbb{R}$，则微分也可以被表示为如下形式：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            f(\mathbf{x}+\mathbf{h})=f(\mathbf{x})+\mathbf{w}^\top\mathbf{h}+O\left (\left \| \mathbf{h} \right \|_2\right ), \mathbf{w}\in \mathbb{R}^n
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+一个基本的事实是可微$\Rightarrow$偏导数存在，因为：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\frac{f(\mathbf{x}+\Delta\mathbf{x}_{i})-f(\mathbf{x})}{\Delta\mathbf{x}_i} = \frac{\mathbf{w}_i \cdot \Delta\mathbf{x}_i}{\Delta\mathbf{x}_i}+\frac{O(\Delta\mathbf{x}_i)}{\Delta\mathbf{x}_i}= \mathbf{w}_i+\frac{O(\Delta\mathbf{x}_i)}{\Delta\mathbf{x}_i} \\
+            &\Rightarrow \lim_{\Delta\mathbf{x}_{i}\to 0} \frac{f(\mathbf{x}+\Delta\mathbf{x}_{i})-f(\mathbf{x})}{\Delta\mathbf{x}_i}=\mathbf{w}_i+\lim_{\Delta\mathbf{x}_{i}\to 0}\frac{O(\Delta\mathbf{x}_i)}{\Delta\mathbf{x}_i}=\mathbf{w}_i \\
+            &\Rightarrow \frac{\partial f}{\partial \mathbf{x}_i}=\mathbf{w}_i 
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+由此可见，实际上向量$\mathbf{w}$就是由函数$f$关于各分量的偏导数构成的：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{w}=\left ( \frac{\partial f}{\partial \mathbf{x}_0},\frac{\partial f}{\partial \mathbf{x}_1},\frac{\partial f}{\partial \mathbf{x}_2},\dots,\frac{\partial f}{\partial \mathbf{x}_n} \right )
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+定义对于向量$\mathbf{x}\in\mathbb{R}^n$: $\mathrm{d}\mathbf{x}=(\mathrm{d}\mathbf{x}_0,\mathrm{d}\mathbf{x}_1,\mathrm{d}\mathbf{x}_2,\dots,\mathrm{d}\mathbf{x}_n)$，则根据全微分公式可以得出如下关系：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\mathrm{d}\mathbf{x}^\top\mathbf{x}=2\mathbf{x}^\top\mathrm{d}\mathbf{x} \\
+            &\mathrm{d}(\mathbf{x}+\mathbf{y})=\mathrm{d}\mathbf{x}+\mathrm{d}\mathbf{y} \\
+            &\mathrm{d}{A\mathbf{x}}=A\mathrm{d}\mathbf{x} \\
+            & 
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+留给读者自证。
+
+\subsection{线性回归模型的解析解}
+一般的线性模型可以被描述为以下形式，其中 $\hat{y}\in \mathbb{R}, \mathbf{x}\in \mathbb{R}^d, \mathbf{w}\in \mathbb{R}^d$ :
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \hat{y}= \mathbf{w}^\top \mathbf{x}+\mathbf{b}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+而对于批量的样本数据，使用 $\mathbf{X}\in \mathbb{R}^{n\times d}$ 表示 $n$ 组样本，$\hat{\mathbf{Y}}\in \mathbb{R}^{n}$ 表示对于数据集上所有样本的预测结果向量，则可以进行如下矩阵表示：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \hat{\mathbf{Y}}=\mathbf{X}\mathbf{w}+\mathbf{B}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+对于真实的数据$Y$，线性回归要求我们最小化损失$\left \| \hat{\mathbf{Y}}-\mathbf{Y} \right \|_2$，这是一个十分简单的优化问题，存在解析解，证明如下：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \left \| \hat{\mathbf{Y}}-\mathbf{Y} \right \|_2 &= \sqrt{(\hat{\mathbf{Y}}-\mathbf{Y})^\top(\hat{\mathbf{Y}}-\mathbf{Y})} \\
+            &= \sqrt{(\mathbf{X}\mathbf{w}+\mathbf{B}-\mathbf{Y})^\top(\mathbf{X}\mathbf{w}+\mathbf{B}-\mathbf{Y})}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+故问题转化为最小化$(\mathbf{X}\mathbf{w}+\mathbf{B}-\mathbf{Y})^\top(\mathbf{X}\mathbf{w}+\mathbf{B}-\mathbf{Y})$，这是一个二次型，我们对于$\mathbf{w}$求导：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathrm{d}(\mathbf{X}\mathbf{w}+\mathbf{B}-\mathbf{Y})^\top(\mathbf{X}\mathbf{w}+\mathbf{B}-\mathbf{Y}) &= 2(\mathbf{X}\mathbf{w}+\mathbf{B}-\mathbf{Y})^\top\mathrm{d}(\mathbf{X}\mathbf{w}+\mathbf{B}-\mathbf{Y}) \\
+            &= 2(\mathbf{X}\mathbf{w}+\mathbf{B}-\mathbf{Y})^\top\mathbf{X}\mathrm{d}\mathbf{w} \\
+            &= 0
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+故可以得到：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            (\mathbf{X}\mathbf{w}+\mathbf{B}-\mathbf{Y})^\top\mathbf{X}=\mathbf{O}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+等式两边同时取转置可知：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\mathbf{X}^\top(\mathbf{X}\mathbf{w}+\mathbf{B}-\mathbf{Y})=\mathbf{O} \\
+            &\mathbf{X}^\top\mathbf{X}\mathbf{w}=\mathbf{X}^\top(\mathbf{Y}-\mathbf{B}) \\
+            &\mathbf{w}=(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top(\mathbf{Y}-\mathbf{B})
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+即可得到参数的最优解，前提是矩阵$\mathbf{X}^\top\mathbf{X}$可逆。
+
+\end{document}
