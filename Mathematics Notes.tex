@@ -64,24 +64,34 @@
 \begin{large}
     \begin{equation}
         \begin{aligned}
-            \mathbf{w}=\left ( \frac{\partial f}{\partial \mathbf{x}_0},\frac{\partial f}{\partial \mathbf{x}_1},\frac{\partial f}{\partial \mathbf{x}_2},\dots,\frac{\partial f}{\partial \mathbf{x}_n} \right )
+            \mathbf{w}=\left ( \frac{\partial f}{\partial \mathbf{x}_1},\frac{\partial f}{\partial \mathbf{x}_2},\frac{\partial f}{\partial \mathbf{x}_3},\dots,\frac{\partial f}{\partial \mathbf{x}_n} \right )
             \nonumber
         \end{aligned}
     \end{equation}
 \end{large}
-定义对于向量$\mathbf{x}\in\mathbb{R}^n$: $\mathrm{d}\mathbf{x}=(\mathrm{d}\mathbf{x}_0,\mathrm{d}\mathbf{x}_1,\mathrm{d}\mathbf{x}_2,\dots,\mathrm{d}\mathbf{x}_n)$，则根据全微分公式可以得出如下关系：
+定义对于向量$\mathbf{x}\in\mathbb{R}^n$: $\mathrm{d}\mathbf{x}=(\mathrm{d}\mathbf{x}_1,\mathrm{d}\mathbf{x}_2,\mathrm{d}\mathbf{x}_3,\dots,\mathrm{d}\mathbf{x}_n)$，则根据全微分公式可以得出如下关系：
 \begin{large}
     \begin{equation}
         \begin{aligned}
             &\mathrm{d}\mathbf{x}^\top\mathbf{x}=2\mathbf{x}^\top\mathrm{d}\mathbf{x} \\
             &\mathrm{d}(\mathbf{x}+\mathbf{y})=\mathrm{d}\mathbf{x}+\mathrm{d}\mathbf{y} \\
-            &\mathrm{d}{A\mathbf{x}}=A\mathrm{d}\mathbf{x} \\
-            & 
+            &\mathrm{d}{\mathbf{A}\mathbf{x}}=\mathbf{A}\mathrm{d}\mathbf{x} \\
+            &\mathrm{d}{\mathbf{x}^\top \mathbf{A} \mathbf{x}}=2\mathbf{x}^\top \mathbf{A} \mathrm{d}\mathbf{x}
             \nonumber
         \end{aligned}
     \end{equation}
 \end{large}
-留给读者自证。
+在此只证明最后一条，注意到：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\mathbf{x}^\top \mathbf{A} \mathbf{x}=\sum_{i=1}^{n}\sum_{j=1}^{n}\mathbf{A}_{i,j}\mathbf{x}_i\mathbf{x}_j \\
+            \frac{\partial}{\partial \mathbf{x}_i}&\mathbf{x}^\top \mathbf{A} \mathbf{x}=2\mathbf{A}_{i,i}\mathbf{x}_i+2\sum_{1 \le j \le n, j\not = i}{\mathbf{A}_{i,j}\mathbf{x}_j}=2\sum_{j=1}^{n}\mathbf{A}_{i,j}\mathbf{x}_j \\
+            \Rightarrow \mathrm{d}&\mathbf{x}^\top \mathbf{A} \mathbf{x}=2\sum_{i=1}^{n}{\sum_{j=1}^{n}\mathbf{A}_{i,j}\mathbf{x}_j\mathrm{d}\mathbf{x}_i}=2\mathbf{x}^\top \mathbf{A}\mathrm{d}\mathbf{x}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
 
 \subsection{线性回归模型的解析解}
 一般的线性模型可以被描述为以下形式，其中 $\hat{y}\in \mathbb{R}, \mathbf{x}\in \mathbb{R}^d, \mathbf{w}\in \mathbb{R}^d$ :
