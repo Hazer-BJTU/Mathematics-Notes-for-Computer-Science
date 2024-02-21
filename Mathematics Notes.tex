@@ -53,8 +53,8 @@
 \begin{large}
     \begin{equation}
         \begin{aligned}
-            &\frac{f(\mathbf{x}+\Delta\mathbf{x}_{i})-f(\mathbf{x})}{\Delta\mathbf{x}_i} = \frac{\mathbf{w}_i \cdot \Delta\mathbf{x}_i}{\Delta\mathbf{x}_i}+\frac{O(\Delta\mathbf{x}_i)}{\Delta\mathbf{x}_i}= \mathbf{w}_i+\frac{O(\Delta\mathbf{x}_i)}{\Delta\mathbf{x}_i} \\
-            &\Rightarrow \lim_{\Delta\mathbf{x}_{i}\to 0} \frac{f(\mathbf{x}+\Delta\mathbf{x}_{i})-f(\mathbf{x})}{\Delta\mathbf{x}_i}=\mathbf{w}_i+\lim_{\Delta\mathbf{x}_{i}\to 0}\frac{O(\Delta\mathbf{x}_i)}{\Delta\mathbf{x}_i}=\mathbf{w}_i \\
+            &\frac{f(\mathbf{x}+\mathbf{h}_i)-f(\mathbf{x})}{\Delta\mathbf{x}_i} = \frac{\mathbf{w}_i \cdot \Delta\mathbf{x}_i}{\Delta\mathbf{x}_i}+\frac{O(\Delta\mathbf{x}_i)}{\Delta\mathbf{x}_i}= \mathbf{w}_i+\frac{O(\Delta\mathbf{x}_i)}{\Delta\mathbf{x}_i} \\
+            &\Rightarrow \lim_{\Delta\mathbf{x}_{i}\to 0} \frac{f(\mathbf{x}+\mathbf{h}_{i})-f(\mathbf{x})}{\Delta\mathbf{x}_i}=\mathbf{w}_i+\lim_{\Delta\mathbf{x}_{i}\to 0}\frac{O(\Delta\mathbf{x}_i)}{\Delta\mathbf{x}_i}=\mathbf{w}_i \\
             &\Rightarrow \frac{\partial f}{\partial \mathbf{x}_i}=\mathbf{w}_i 
             \nonumber
         \end{aligned}
@@ -64,7 +64,7 @@
 \begin{large}
     \begin{equation}
         \begin{aligned}
-            \mathbf{w}=\left ( \frac{\partial f}{\partial \mathbf{x}_1},\frac{\partial f}{\partial \mathbf{x}_2},\frac{\partial f}{\partial \mathbf{x}_3},\dots,\frac{\partial f}{\partial \mathbf{x}_n} \right )
+            \mathbf{w}=\left ( \frac{\partial f}{\partial \mathbf{x}_1},\frac{\partial f}{\partial \mathbf{x}_2},\frac{\partial f}{\partial \mathbf{x}_3},\dots,\frac{\partial f}{\partial \mathbf{x}_n} \right )^\top
             \nonumber
         \end{aligned}
     \end{equation}
@@ -92,6 +92,25 @@
         \end{aligned}
     \end{equation}
 \end{large}
+与一元函数同理，如果上述函数$f$满足二阶偏导数连续的条件，则我们也可以利用Hessian矩阵做出更高阶的估计：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            f(\mathbf{x}+\mathbf{h})=f(\mathbf{x})+\mathbf{w}^\top \mathbf{h}+\frac{1}{2}\mathbf{h}^\top \mathbf{H}\mathbf{h}+O(\left \| \mathbf{h} \right \|_2^2)
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+其中Hessian矩阵的形式为：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{H}_{i,j}=\frac{\partial^2f}{\partial\mathbf{x}_i\partial\mathbf{x}_j}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+        
 
 \subsection{线性回归模型的解析解}
 一般的线性模型可以被描述为以下形式，其中 $\hat{y}\in \mathbb{R}, \mathbf{x}\in \mathbb{R}^d, \mathbf{w}\in \mathbb{R}^d$ :
@@ -154,5 +173,8 @@
     \end{equation}
 \end{large}
 即可得到参数的最优解，前提是矩阵$\mathbf{X}^\top\mathbf{X}$可逆。
+
+\subsection{SVD奇异值分解}
+
 
 \end{document}
