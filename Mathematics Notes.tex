@@ -175,6 +175,108 @@
 即可得到参数的最优解，前提是矩阵$\mathbf{X}^\top\mathbf{X}$可逆。
 
 \subsection{SVD奇异值分解}
+一般来说，任何实矩阵$\mathbf{A}\in \mathbb{R}^{n\times m}$都可以被无条件地分解为如下三个矩阵的乘积：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{A}_{n\times m}=\mathbf{U}_{n\times n}\mathbf{\Sigma}_{n\times m}\mathbf{V}_{m\times m}^\top
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+其中$\mathbf{U},\mathbf{V}$均为正交矩阵，并且$\mathbf{\Sigma}$满足：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{\Sigma}_{i,j}=\begin{cases}
+                \sqrt{\lambda_i} & i=j\\
+                0 & i\not = j
+               \end{cases} 
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+考虑$\mathbf{A}^\top \mathbf{A}$，这是一个实对称矩阵，故其一定可以被正交对角化，也即存在正交矩阵$\mathbf{V}$，使得：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{A}^\top \mathbf{A}=\mathbf{V}\mathbf{\Lambda}\mathbf{V}^\top
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+其中：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{\Lambda}_{m\times m}=\begin{bmatrix}
+                \lambda_1 &  &  & \\
+                 & \lambda_2 &  & \\
+                 &  & \ddots  & \\
+                 &  &  &\lambda_m
+               \end{bmatrix}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+考虑如下一组向量，我们断言它们之间是互相正交的：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \frac{\mathbf{A}\mathbf{v}_1}{\sqrt{\lambda_1}},\frac{\mathbf{A}\mathbf{v}_2}{\sqrt{\lambda_2}},\frac{\mathbf{A}\mathbf{v}_3}{\sqrt{\lambda_3}},\dots,\frac{\mathbf{A}\mathbf{v}_m}{\sqrt{\lambda_m}}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+证明如下：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \frac{\mathbf{A}\mathbf{v}_i}{\sqrt{\lambda}_i} \cdot \frac{\mathbf{A}\mathbf{v}_j}{\sqrt{\lambda}_j} = \frac{\mathbf{v}_i^\top\mathbf{A}^\top\mathbf{A}\mathbf{v}_j}{\sqrt{\lambda_i\lambda_j}} 
+            = \frac{\lambda_j\mathbf{v}_i^\top\mathbf{v}_j}{\sqrt{\lambda_i\lambda_j}} 
+            = \begin{cases}
+                1 & i=j \\
+                0 & i\not = j
+                \end{cases}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+若$m\ge n$，考虑如下矩阵：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{U}_{n\times n}=\left (  \frac{\mathbf{A}\mathbf{v}_1}{\sqrt{\lambda_1}},\frac{\mathbf{A}\mathbf{v}_2}{\sqrt{\lambda_2}},\frac{\mathbf{A}\mathbf{v}_3}{\sqrt{\lambda_3}},\dots,\frac{\mathbf{A}\mathbf{v}_n}{\sqrt{\lambda_n}}\right )
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+根据上述证明，$\mathbf{U}$是正交矩阵，并且满足：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\mathbf{U}\mathbf{\Sigma}=\mathbf{A}\mathbf{V} \\
+            &\mathbf{A}=\mathbf{A}\mathbf{V}\mathbf{V}^\top=\mathbf{U}\mathbf{\Sigma}\mathbf{V}^\top
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+若$m<n$，我们可以反过来对$\mathbf{A}^\top$做奇异值分解，也可以得到相同的结果，奇异值分解告诉我们：任何线性变换都可以被分解为一次旋转(旋转、反射或其复合)，一次维度变换及拉伸，一次旋转的复合。除此之外，其还可以被用于求一般矩阵的“逆”：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\mathbf{A}=\mathbf{U}\mathbf{\Sigma}\mathbf{V}^\top \\
+            &\mathbf{A}^+=\mathbf{V}\mathbf{\Sigma}^+\mathbf{U}^\top
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+其中$\mathbf{\Sigma}^+$由将$\mathbf{\Sigma}$中非零元素取倒数后再转置得到。
 
+\subsection{极大似然估计与最小化交叉熵损失}
+
+\section{算法中的数学}
+
+\subsection{离散傅里叶变换DFT与快速傅里叶变换FFT}
 
 \end{document}
