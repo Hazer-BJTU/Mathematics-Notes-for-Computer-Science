@@ -362,7 +362,8 @@
 \begin{large}
     \begin{equation}
         \begin{aligned}
-            DFT^{-1}\left ( DFT(a) \odot DFT(b) \right )_k &= \frac{1}{N}\sum_{t=0}^{N-1}\left ( DFT(a) \odot DFT(b) \right )_t \cdot \omega_N^{kt}\\
+            &DFT^{-1}\left ( DFT(a) \odot DFT(b) \right )_k \\
+            &= \frac{1}{N}\sum_{t=0}^{N-1}\left ( DFT(a) \odot DFT(b) \right )_t \cdot \omega_N^{kt}\\
             &= \frac{1}{N}\sum_{t=0}^{N-1} DFT(a)_t \cdot DFT(b)_t \cdot \omega_N^{kt} \\
             &= \frac{1}{N}\sum_{t=0}^{N-1} \left ( \sum_{n=0}^{N-1}{a_n \cdot \omega_{N}^{-tn}} \right ) \cdot \left ( \sum_{m=0}^{N-1}{b_m \cdot \omega_{N}^{-tm}} \right ) \cdot \omega_N^{kt} \\
             &= \frac{1}{N}\sum_{t=0}^{N-1} \left ( \sum_{n=0}^{N-1}\sum_{m=0}^{N-1}a_nb_m \cdot \omega_N^{-t(n+m)} \right ) \cdot \omega_N^{kt} \\
