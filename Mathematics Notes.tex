@@ -275,8 +275,104 @@
 
 \subsection{极大似然估计与最小化交叉熵损失}
 
-\section{算法中的数学}
+\section{算法/基础数学}
 
 \subsection{离散傅里叶变换DFT与快速傅里叶变换FFT}
+对于数列$\left \{ a_n \right \}, \left \{ b_n \right \},0 \le n < N$，我们可以如下定义其离散卷积：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\left ( a*b \right )_k=\sum_{i=0}^{k}{a_ib_{k-i}} \\
+            &0 \le k < N
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+我们记单位根\large{$e^{\frac{2k\pi i}{n}}=\omega_{n}^k$}，则可以如下定义其离散傅里叶变换及其逆变换：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &DFT(a)_k=\sum_{t=0}^{N-1}{a_t \cdot \omega_{N}^{-kt}} \\
+            &a_k=\frac{1}{N}\sum_{t=0}^{N-1}{DFT(a)_t \cdot \omega_{N}^{kt}}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+其中逆变换的证明如下：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \frac{1}{N}\sum_{t=0}^{N-1}{DFT(a)_t \cdot \omega_{N}^{kt}} &= \frac{1}{N}\sum_{t=0}^{N-1}\left ( \sum_{u=0}^{N-1}a_u \cdot \omega_N^{-tu} \right ) \cdot \omega_{N}^{kt} \\
+            &= \frac{1}{N}\sum_{t=0}^{N-1}\sum_{u=0}^{N-1}a_u \cdot \omega_N^{t(k-u)} \\
+            &= \frac{1}{N}\sum_{u=0}^{N-1}\sum_{t=0}^{N-1}a_u \cdot \omega_N^{t(k-u)}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+首先考虑如果$u=k$，则有下式成立：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \omega_N^{t(k-u)}&=\omega_N^{0}=1 \\
+            \sum_{t=0}^{N-1}a_u \cdot \omega_N^{t(k-u)}&=Na_u=Na_k
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+然后考虑如果$u \not = k$，注意到$\omega_N^N=1$，则有下式成立：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \sum_{t=0}^{N-1}a_u \cdot \omega_N^{t(k-u)} &= a_u\sum_{t=0}^{N-1}\omega_N^{t(k-u)} \\
+            &= a_u \cdot \frac{1-\omega_N^{N(k-u)}}{1-\omega_N^{k-u}} \\
+            &= 0
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+故综上所述，逆变换得证：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \frac{1}{N}\sum_{t=0}^{N-1}{DFT(a)_t \cdot \omega_{N}^{kt}}=\frac{1}{N} \cdot Na_k=a_k
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+接着我们引入卷积定理的离散形式：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            a*b=DFT^{-1}\left ( DFT(a) \odot DFT(b) \right )
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+为了证明上式，我们只需要证明：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            (a*b)_k &= DFT^{-1}\left ( DFT(a) \odot DFT(b) \right )_k \\
+            &0 \le k < N
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+利用定义展开右式，同理可证：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            DFT^{-1}\left ( DFT(a) \odot DFT(b) \right )_k &= \frac{1}{N}\sum_{t=0}^{N-1}\left ( DFT(a) \odot DFT(b) \right )_t \cdot \omega_N^{kt}\\
+            &= \frac{1}{N}\sum_{t=0}^{N-1} DFT(a)_t \cdot DFT(b)_t \cdot \omega_N^{kt} \\
+            &= \frac{1}{N}\sum_{t=0}^{N-1} \left ( \sum_{n=0}^{N-1}{a_n \cdot \omega_{N}^{-tn}} \right ) \cdot \left ( \sum_{m=0}^{N-1}{b_m \cdot \omega_{N}^{-tm}} \right ) \cdot \omega_N^{kt} \\
+            &= \frac{1}{N}\sum_{t=0}^{N-1} \left ( \sum_{n=0}^{N-1}\sum_{m=0}^{N-1}a_nb_m \cdot \omega_N^{-t(n+m)} \right ) \cdot \omega_N^{kt} \\
+            &= \frac{1}{N}\sum_{n=0}^{N-1}\sum_{m=0}^{N-1}\sum_{t=0}^{N-1}a_nb_m \cdot \omega_N^{t(k-n-m)} \\
+            &= \frac{1}{N}\sum_{n=0}^{N-1}\sum_{m=0}^{N-1}\left [ n+m=k \right ]Na_nb_m \\
+            &= \sum_{n=0}^{k}a_nb_{k-n} \\
+            &= (a*b)_k
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
 
 \end{document}
