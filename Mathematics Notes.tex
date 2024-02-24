@@ -4,6 +4,10 @@
 \usepackage{amsmath}
 \usepackage{lmodern}
 \usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage{tikz}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usetikzlibrary{cd}
 
 \geometry{a4paper,scale=0.75} %设置页边距
 
@@ -282,8 +286,7 @@
 \begin{large}
     \begin{equation}
         \begin{aligned}
-            &\left ( a*b \right )_k=\sum_{i=0}^{k}{a_ib_{k-i}} \\
-            &0 \le k < N
+            &\left ( a*b \right )_k=\sum_{i=0}^{k}{a_ib_{k-i}} & 0 \le k < N
             \nonumber
         \end{aligned}
     \end{equation}
@@ -352,8 +355,7 @@
 \begin{large}
     \begin{equation}
         \begin{aligned}
-            (a*b)_k &= DFT^{-1}\left ( DFT(a) \odot DFT(b) \right )_k \\
-            &0 \le k < N
+            &(a*b)_k=DFT^{-1}\left ( DFT(a) \odot DFT(b) \right )_k & 0 \le k < N
             \nonumber
         \end{aligned}
     \end{equation}
@@ -375,5 +377,108 @@
         \end{aligned}
     \end{equation}
 \end{large}
+快速傅里叶变换算法可以帮助我们高效地计算离散傅里叶变换：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \begin{tikzcd}
+                \left \{ a_n \right \} \arrow[r,"FFT"] & \left \{ DFT(a)_n \right \}
+            \end{tikzcd}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+结合卷积定理，我们得以加速多项式乘法至$O(n\log n)$时间复杂度：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \begin{tikzcd}
+                \left \{ a \right \}, \left \{ b \right \} \arrow[dd,"O(n\log n)"] \arrow[rr,"O(n^2)"] & & \left \{ a*b \right \} \\
+                & & \\
+                \left \{ DFT(a) \right \}, \left \{ DFT(b) \right \} \arrow[rr,"O(n)"] & & \left \{ DFT(a) \odot DFT(b) \right \} \arrow[uu,"O(n\log n)"]
+            \end{tikzcd}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+为了简化问题，此处我们只讨论$N=2^K, K\in \mathbb{N}$的简单情形，为了计算离散傅里叶变换，我们的目标是计算下列数值：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\mathbf{F}=\left [ F(w_n^{0}), F(w_n^{-1}), F(w_n^{-2}), \dots, F(w_n^{-(N-1)}) \right ] \\
+            &F(x)=\sum_{t=0}^{N-1}a_tx^t \Rightarrow DFT(a)_k=F(\omega_N^{-k})
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+我们将函数$F(x)$拆分为如下两个部分，注意到当$N\not = 1$时其为偶数：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            F(x) &= a_0+a_1x+a_2x^2+\dots +a_{N-1}x^{N-1} \\
+            &= (a_0+a_2x^2+\dots +a_{N-2}x^{N-2})+(a_1x+a_3x^3+\dots +a_{N-1}x^{N-1}) \\
+            &= (a_0+a_2x^2+\dots +a_{N-2}x^{N-2})+x(a_1+a_3x^2+\dots +a_{N-1}x^{N-2}) \\
+            &= A_{e}(x^2)+xA_{o}(x^2)
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+故问题转化为计算如下数值：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &A_{e}(\omega_N^{-2k}), A_{o}(\omega_N^{-2k}) & 0 \le k <N
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+注意到：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\omega_N^{-2k}=\omega_{\frac{N}{2}}^{-k} \\
+            &\omega_{\frac{N}{2}}^{-(k+\frac{N}{2})}=\omega_{\frac{N}{2}}^{-k} \\
+            &\omega_{N}^{-(k+\frac{N}{2})}=-\omega_{N}^{-k}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+所以我们实际上只需要计算如下数值：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\mathbf{A}_e=\left [ A_{e}(\omega_{\frac{N}{2}}^{0}),A_{e}(\omega_{\frac{N}{2}}^{-1}),A_{e}(\omega_{\frac{N}{2}}^{-2}),\dots ,A_{e}(\omega_{\frac{N}{2}}^{-(\frac{N}{2}-1)}) \right ] \\
+            &\mathbf{A}_o=\left [ A_{o}(\omega_{\frac{N}{2}}^{0}),A_{o}(\omega_{\frac{N}{2}}^{-1}),A_{o}(\omega_{\frac{N}{2}}^{-2}),\dots ,A_{o}(\omega_{\frac{N}{2}}^{-(\frac{N}{2}-1)}) \right ]
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+便可以计算出所需要的数值:
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\mathbf{F}\left [ k \right ]=\mathbf{A}_e\left [ k \right ]+\omega_N^{-k}\mathbf{A}_o\left [ k \right ] \\
+            &\mathbf{F}\left [ k+\frac{N}{2} \right ]=\mathbf{A}_e\left [ k \right ]-\omega_N^{-k}\mathbf{A}_o\left [ k \right ] \\
+            &0 \le k < \frac{N}{2}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+在此我们只证明第二个算式：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{F}\left [ k+\frac{N}{2} \right ] &= F(\omega_N^{-(k+\frac{N}{2})}) \\
+            &= A_e(\omega_N^{-2(k+\frac{N}{2})})+\omega_N^{-(k+\frac{N}{2})}A_o(\omega_N^{-2(k+\frac{N}{2})}) \\
+            &= A_e(\omega_{\frac{N}{2}}^{-k+\frac{N}{2}})-\omega_N^{-k}A_o(\omega_{\frac{N}{2}}^{-k+\frac{N}{2}}) \\
+            &= A_e(\omega_{\frac{N}{2}}^{-k})-\omega_N^{-k}A_o(\omega_{\frac{N}{2}}^{-k}) \\
+            &= \mathbf{A}_e\left [ k \right ]-\omega_N^{-k}\mathbf{A}_o\left [ k \right ]
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+而$\mathbf{A}_e, \mathbf{A}_o$的计算又可以递归地使用上述方法，并且问题的规模在指数级地缩减，故我们可以利用FFT算法高效地实现离散傅里叶变换地计算。
+
+\section{算法竞赛中的数论与组合数学}
 
 \end{document}
