@@ -135,12 +135,12 @@
         \end{aligned}
     \end{equation}
 \end{large}
-对于真实的数据$Y$，线性回归要求我们最小化损失$\left \| \hat{\mathbf{Y}}-\mathbf{Y} \right \|_2$，这是一个十分简单的优化问题，存在解析解，证明如下：
+对于真实的数据$Y$，线性回归要求我们最小化损失$\left \| \hat{\mathbf{Y}}-\mathbf{Y} \right \|_2^2$，这是一个十分简单的优化问题，存在解析解，证明如下：
 \begin{large}
     \begin{equation}
         \begin{aligned}
-            \left \| \hat{\mathbf{Y}}-\mathbf{Y} \right \|_2 &= \sqrt{(\hat{\mathbf{Y}}-\mathbf{Y})^\top(\hat{\mathbf{Y}}-\mathbf{Y})} \\
-            &= \sqrt{(\mathbf{X}\mathbf{w}+\mathbf{B}-\mathbf{Y})^\top(\mathbf{X}\mathbf{w}+\mathbf{B}-\mathbf{Y})}
+            \left \| \hat{\mathbf{Y}}-\mathbf{Y} \right \|_2^2 &= (\hat{\mathbf{Y}}-\mathbf{Y})^\top(\hat{\mathbf{Y}}-\mathbf{Y}) \\
+            &= (\mathbf{X}\mathbf{w}+\mathbf{B}-\mathbf{Y})^\top(\mathbf{X}\mathbf{w}+\mathbf{B}-\mathbf{Y})
             \nonumber
         \end{aligned}
     \end{equation}
@@ -511,6 +511,116 @@
     \begin{equation}
         \begin{aligned}
             T(N)=N \cdot T(1)+N\log_2 N=O\left ( N\log N \right )
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+
+\subsection{傅里叶变换}
+如果一个具有周期$T$的函数$f(t)$在区间$\left [ 0,T \right ]$上满足Dirichlet条件，那么我们可以将其展开为如下形式的傅里叶级数：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            f(t) \sim \frac{a_0}{2}+\sum_{k=0}^{\infty}{\left ( a_k\cos \left (\frac{2\pi}{T}kt\right )+b_k\sin\left (\frac{2\pi}{T}kt\right ) \right )}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+我们可以通过如下变换将其转化为更为简洁的形式，令$\frac{2\pi}{T}=\omega$，于是有：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\cos\left (\frac{2\pi}{T}kt\right )=\cos(\omega kt)=\frac{e^{i\omega kt}+e^{-i\omega kt}}{2} \\
+            &\sin\left (\frac{2\pi}{T}kt\right )=\cos(\omega kt)=\frac{e^{i\omega kt}-e^{-i\omega kt}}{2i} \\
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+故而：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\frac{a_0}{2}+\sum_{k=0}^{\infty}{\left ( a_k\cos \left (\frac{2\pi}{T}kt\right )+b_k\sin\left (\frac{2\pi}{T}kt\right ) \right )} \\
+            &=\frac{a_0}{2}+\sum_{k=0}^{\infty}\left (a_k \cdot \frac{e^{i\omega kt}+e^{-i\omega kt}}{2}+b_k \cdot \frac{e^{i\omega kt}-e^{-i\omega kt}}{2i} \right ) \\
+            &=\frac{a_0}{2}+\sum_{k=0}^{\infty}\left ( \frac{a_k+ib_k}{2}e^{-i\omega kt}+\frac{a_k-ib_k}{2}e^{i\omega kt} \right ) \\
+            &=\sum_{k=-\infty}^{+\infty} c_k \cdot e^{i\omega kt}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+显然，其中：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            c_k=\left\{\begin{matrix}
+                \displaystyle{\frac{a_k-ib_k}{2}} & k>0 \\
+                & \\
+                \displaystyle{\frac{a_0}{2}} & k=0 \\
+                & \\
+                \displaystyle{\frac{a_k+ib_k}{2}} & k<0
+                \end{matrix}\right.
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+如果上述级数在区间$\left [ 0,T \right ]$内一致收敛于$f(t)$，这通常要求其极限函数的导数是平方可积的，那么我们可以通过如下方法求得其系数：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            c_k=\frac{1}{T}\int_{0}^{T}{f(t)e^{-i\omega kt}dt}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+证明如下，由一致收敛性我们可以交换积分以及级数求和的次序：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \int_{0}^{T}{f(t)e^{-i\omega kt}dt} &= \int_{0}^{T}{\sum_{n=-\infty}^{+\infty} c_n \cdot e^{i\omega nt} \cdot e^{-i\omega kt}dt} \\
+            &= \sum_{n=-\infty}^{+\infty}{\int_{0}^{T} c_n \cdot e^{i\omega nt} \cdot e^{-i\omega kt}dt} \\
+            &= \sum_{n=-\infty}^{+\infty}{c_n\int_{0}^{T} e^{i\omega (n-k)t}dt} \\
+            &= \sum_{n=-\infty}^{+\infty}{c_n[n=k]T} \\
+            &= Tc_k
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+我们可以通过平移使得函数$f(t)$成为区间$[-\frac{T}{2},\frac{T}{2}]$上的周期函数，故而有下式成立：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            f(t) &= \sum_{k=-\infty}^{+\infty}c_k \cdot e^{i\omega kt} \\
+            &= \sum_{k=-\infty}^{+\infty}\left (\frac{1}{T}\int_{-\frac{T}{2}}^{\frac{T}{2}}{f(\xi )e^{-i\omega k\xi}d\xi}\right ) \cdot e^{i\omega kt} \\
+            &= \sum_{k=-\infty}^{+\infty}\left (\int_{-\frac{T}{2}}^{\frac{T}{2}}{f(\xi )e^{-i2\pi v\xi}d\xi}\right ) \cdot e^{i2\pi vt} \cdot \frac{1}{T}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+其中$v=\frac{k}{T}$，考虑令$T\to \infty$，此时我们可以将一般函数$f$视为具有无穷大周期的周期函数，于是有：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            f(t) &= \lim_{T \to \infty} \sum_{k=-\infty}^{+\infty}\left (\int_{-\frac{T}{2}}^{\frac{T}{2}}{f(\xi )e^{-i2\pi v\xi}d\xi}\right ) \cdot e^{i2\pi vt} \cdot \frac{1}{T} \\
+            &= \int_{-\infty}^{+\infty}\left (\int_{-\infty}^{+\infty}{f(\xi )e^{-i2\pi v\xi}d\xi}\right ) e^{i2\pi vt} dv
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+令$2\pi v=\omega$就可以得到如下熟悉的傅里叶变换形式：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            f(t) =\frac{1}{2\pi}\int_{-\infty}^{+\infty}\left (\int_{-\infty}^{+\infty}{f(\xi )e^{-i\omega\xi}d\xi}\right ) e^{i\omega t} d\omega
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+于是我们可以由此定义傅里叶变换以及傅里叶逆变换：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &F(\omega)=\int_{-\infty}^{+\infty}f(t)e^{-i\omega t}dt \\
+            &f(t)=\frac{1}{2\pi}\int_{-\infty}^{+\infty}F(\omega)e^{i\omega t}d\omega
             \nonumber
         \end{aligned}
     \end{equation}
