@@ -5,5 +5,5 @@
 \contentsline {subsection}{\numberline {0.1.4}极大似然估计与最小化交叉熵损失}{7}{}%
 \contentsline {section}{\numberline {0.2}算法/基础数学}{7}{}%
 \contentsline {subsection}{\numberline {0.2.1}离散傅里叶变换DFT与快速傅里叶变换FFT}{7}{}%
-\contentsline {subsection}{\numberline {0.2.2}傅里叶变换}{10}{}%
-\contentsline {section}{\numberline {0.3}算法竞赛中的数论与组合数学}{12}{}%
+\contentsline {subsection}{\numberline {0.2.2}傅里叶变换}{11}{}%
+\contentsline {section}{\numberline {0.3}算法竞赛中的数论与组合数学}{14}{}%

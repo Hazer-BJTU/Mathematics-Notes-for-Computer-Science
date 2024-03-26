@@ -114,6 +114,53 @@
         \end{aligned}
     \end{equation}
 \end{large}
+一般我们会将向量$\mathbf{w}$称为函数$f$的梯度，记为$\mathbf{grad}f$，其还可以使用哈密顿算符表示：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\mathbf{grad}f=\nabla f \\
+            &\mathbf{H}=\nabla \nabla^\top f
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+如果我们在上述表示中舍弃高阶项得到函数$f$的近似表达：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            f(\mathbf{x}+\mathbf{h})\approx f(x)+(\nabla f)^\top \mathbf{h}+\frac{1}{2}\mathbf{h}^\top(\nabla \nabla^\top f)\mathbf{h}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+根据上述导数公式，我们可以令函数$f$关于$\mathbf{h}$的导数为零来求得函数的极值点(驻点)，当函数存在二阶连续偏导数时：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\frac{\mathrm{d}f}{\mathrm{d}\mathbf{h}}=(\nabla f)^\top+\mathbf{h}^\top(\nabla \nabla^\top f)=\mathbf{O} \\
+            &\Rightarrow \mathbf{h}=-(\nabla \nabla^\top f)^{-1}(\nabla f)
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+于是我们可以得到牛顿迭代法求函数极值的表达式：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{x}_{n+1} \gets \mathbf{x}_n-({\nabla_{\mathbf{x}} \nabla_{\mathbf{x}}}^\top f)^{-1}(\nabla_{\mathbf{x}} f)
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+也可以简写为如下形式：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{x}_{n+1} \gets \mathbf{x}_n-\left ( \frac{\partial^2 f}{\partial \mathbf{x}\partial \mathbf{x}^\top}\right )^{-1}\left (\frac{\partial f}{\partial \mathbf{x}}\right )
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
         
 
 \subsection{线性回归模型的解析解}
@@ -135,12 +182,12 @@
         \end{aligned}
     \end{equation}
 \end{large}
-对于真实的数据$Y$，线性回归要求我们最小化损失$\left \| \hat{\mathbf{Y}}-\mathbf{Y} \right \|_2^2$，这是一个十分简单的优化问题，存在解析解，证明如下：
+对于真实的数据$Y$，线性回归要求我们最小化均方误差MSE，这是一个十分简单的优化问题，存在解析解，证明如下：
 \begin{large}
     \begin{equation}
         \begin{aligned}
-            \left \| \hat{\mathbf{Y}}-\mathbf{Y} \right \|_2^2 &= (\hat{\mathbf{Y}}-\mathbf{Y})^\top(\hat{\mathbf{Y}}-\mathbf{Y}) \\
-            &= (\mathbf{X}\mathbf{w}+\mathbf{B}-\mathbf{Y})^\top(\mathbf{X}\mathbf{w}+\mathbf{B}-\mathbf{Y})
+            \frac{1}{n}\left \| \hat{\mathbf{Y}}-\mathbf{Y} \right \|_2^2 &= \frac{1}{n}(\hat{\mathbf{Y}}-\mathbf{Y})^\top(\hat{\mathbf{Y}}-\mathbf{Y}) \\
+            &= \frac{1}{n}(\mathbf{X}\mathbf{w}+\mathbf{B}-\mathbf{Y})^\top(\mathbf{X}\mathbf{w}+\mathbf{B}-\mathbf{Y})
             \nonumber
         \end{aligned}
     \end{equation}
@@ -621,6 +668,52 @@
         \begin{aligned}
             &F(\omega)=\int_{-\infty}^{+\infty}f(t)e^{-i\omega t}dt \\
             &f(t)=\frac{1}{2\pi}\int_{-\infty}^{+\infty}F(\omega)e^{i\omega t}d\omega
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+对于$\mathbb{R}$上的两个可积函数$f(x)$，$g(x)$，我们定义其卷积如下：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            (f * g)(x)=\int_{-\infty}^{+\infty}f(t)g(x-t)dt
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+通过换元$u=x-t$我们可以得到卷积运算的交换律：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            (f * g)(x) &= \int_{-\infty}^{+\infty}f(t)g(x-t)dt \\
+            &= -\int_{+\infty}^{-\infty}f(x-u)g(u)du \\
+            &= \int_{-\infty}^{+\infty}g(u)f(x-u)du \\
+            &= (g * f)(x)
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+卷积定理是傅立叶变换满足的一个重要性质，其指出，函数卷积的傅立叶变换是函数傅立叶变换的乘积。
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathcal{F}\left [f * g \right ](\omega)=\mathcal{F}\left [f\right ](\omega) \cdot \mathcal{F}\left [g\right ](\omega)
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+证明如下：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\mathcal{F}\left [ f * g \right ](\omega) \\
+            &= \int_{-\infty}^{+\infty}(f * g)(t)e^{-i\omega t}dt \\
+            &= \int_{-\infty}^{+\infty}\left (\int_{-\infty}^{+\infty}f(\tau)g(t-\tau)d\tau \right ) e^{-i\omega t}dt \\
+            &= \int_{-\infty}^{+\infty}\left (\int_{-\infty}^{+\infty} g(t-\tau)e^{-i\omega t}dt\right )f(\tau)d\tau \\
+            &= \int_{-\infty}^{+\infty}\left (\int_{-\infty}^{+\infty} g(t-\tau)e^{-i\omega (t-\tau)}dt\right )f(\tau)e^{-i\omega \tau}d\tau \\
+            &= \int_{-\infty}^{+\infty}\left (\int_{-\infty}^{+\infty} g(u)e^{-i\omega u}du\right )f(\tau)e^{-i\omega \tau}d\tau \\
+            &= \mathcal{F}\left [ g\right ](\omega) \cdot \int_{-\infty}^{+\infty}f(\tau)e^{-i\omega \tau}d\tau \\
+            &= \mathcal{F}\left [f\right ](\omega) \cdot \mathcal{F}\left [g\right ](\omega)
             \nonumber
         \end{aligned}
     \end{equation}
