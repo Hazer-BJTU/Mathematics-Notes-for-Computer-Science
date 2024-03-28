@@ -7,3 +7,4 @@
 \contentsline {subsection}{\numberline {0.2.1}离散傅里叶变换DFT与快速傅里叶变换FFT}{7}{}%
 \contentsline {subsection}{\numberline {0.2.2}傅里叶变换}{11}{}%
 \contentsline {section}{\numberline {0.3}算法竞赛中的数论与组合数学}{14}{}%
+\contentsline {subsection}{\numberline {0.3.1}容斥原理与二项式反演}{14}{}%

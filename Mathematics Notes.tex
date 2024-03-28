@@ -338,7 +338,7 @@
         \end{aligned}
     \end{equation}
 \end{large}
-我们记单位根\large{$e^{\frac{2k\pi i}{n}}=\omega_{n}^k$}，则可以如下定义其离散傅里叶变换及其逆变换：
+我们记单位根$e^{\frac{2k\pi i}{n}}=\omega_{n}^k$，则可以如下定义其离散傅里叶变换及其逆变换：
 \begin{large}
     \begin{equation}
         \begin{aligned}
@@ -720,5 +720,173 @@
 \end{large}
 
 \section{算法竞赛中的数论与组合数学}
+
+\subsection{容斥原理与二项式反演}
+\textbf{容斥原理}的描述如下，对于一系列集合$A_1,A_2,\dots,A_n$，我们有：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \left | \bigcup_{i=1}^{n}A_i \right |=\sum_{i=1}^{n}(-1)^{i+1}\sum_{1 \le k_1 < k_2 < \dots < k_i \le n} \left | \bigcap_{j=1}^i A_{k_j} \right |
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+证明如下：我们使用数学归纳法，当$n=2$时，显然有：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \left | A_1 \cup A_2 \right | = \left | A_1 \right |+\left | A_2 \right |-\left | A_1 \cap A_2 \right |
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+假设当$n=m$时有结论成立，则当$n=m+1$时，我们有：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \left | \bigcup_{i=1}^{m+1}A_i \right | &= \left | \bigcup_{i=1}^{m}A_i \right | + \left | A_{m+1} \right |-\left | \bigcup_{i=1}^{m} \left (A_i \cap A_{m+1} \right ) \right | \\
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+其中：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            -\left | \bigcup_{i=1}^{m}\left (A_i \cap A_{m+1} \right ) \right | &= -\sum_{i=1}^{m}(-1)^{i+1}\sum_{1 \le k_1 < k_2 < \dots < k_i \le m} \left | \bigcap_{j=1}^i \left (A_{k_j} \cap A_{m+1}\right ) \right | \\
+            &= \sum_{i=1}^{m}(-1)^{i+2}\sum_{1 \le k_1 < k_2 < \dots < k_i \le m} \left | \left (\bigcap_{j=1}^i A_{k_j} \right ) \cap A_{m+1} \right | \\
+            &= \sum_{i=2}^{m+1}(-1)^{i+1}\sum_{1 \le k_1 < k_2 < \dots < k_{i-1} \le m} \left | \left (\bigcap_{j=1}^{i-1} A_{k_j} \right ) \cap A_{m+1} \right | \\
+            &= \sum_{i=2}^{m+1}(-1)^{i+1}\sum_{1 \le k_1 < k_2 < \dots < k_{i-1} < k_i = m+1} \left | \bigcap_{j=1}^{i} A_{k_j}\right |
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+故：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \left | A_{m+1} \right |-\left | \bigcup_{i=1}^{m} \left (A_i \cap A_{m+1} \right ) \right |=\sum_{i=1}^{m+1}(-1)^{i+1}\sum_{1 \le k_1 < k_2 < \dots < k_{i-1} < k_i = m+1} \left | \bigcap_{j=1}^{i} A_{k_j}\right |
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+而：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \left | \bigcup_{i=1}^{m}A_i \right | &= \sum_{i=1}^{m}(-1)^{i+1}\sum_{1 \le k_1 < k_2 < \dots < k_i \le m} \left | \bigcap_{j=1}^i A_{k_j} \right | \\
+            &= \sum_{i=1}^{m}(-1)^{i+1}\sum_{1 \le k_1 < k_2 < \dots < k_i < m+1} \left | \bigcap_{j=1}^i A_{k_j} \right |
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+综上所述：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \left | \bigcup_{i=1}^{m+1}A_i \right | &= \left | \bigcup_{i=1}^{m}A_i \right | + \left | A_{m+1} \right |-\left | \bigcup_{i=1}^{m} \left (A_i \cap A_{m+1} \right ) \right | \\
+            &= \sum_{i=1}^{m}(-1)^{i+1}\sum_{1 \le k_1 < k_2 < \dots < k_i < m+1} \left | \bigcap_{j=1}^i A_{k_j} \right | \\
+            &+ \sum_{i=1}^{m+1}(-1)^{i+1}\sum_{1 \le k_1 < k_2 < \dots < k_{i-1} < k_i = m+1} \left | \bigcap_{j=1}^{i} A_{k_j}\right |\\
+            &= \sum_{i=1}^{m+1}(-1)^{i+1}\sum_{1 \le k_1 < k_2 < \dots < k_i \le m+1} \left | \bigcap_{j=1}^i A_{k_j} \right |
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+归纳成立，结论得证。接下来我们考虑如下特殊情形，假如对于:
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\forall k_1, k_2, \dots, k_i & 1 \le k_1 < k_2 < \dots < k_i \le n\\
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+均有：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\left | \bigcap_{j=1}^iA_{k_j} \right | = S_i
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+则我们显然有：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \left | \bigcup_{i=1}^{n}A_i \right | &= \sum_{i=1}^{n}(-1)^{i+1}C_n^iS_i
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+在之后的讨论中，我们一般将上述条件简称为\textbf{完备对称条件}，\textbf{二项式反演}指出，如果对于：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\forall k_1, k_2, \dots, k_i & 1 \le k_1 < k_2 < \dots < k_i \le n\\
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+均有：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\left | \bigcup_{j=1}^iA_{k_j} \right | = U_i
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+则：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            S_n=\sum_{i=1}^n(-1)^{i+1}C_n^iU_i
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+证明如下，根据之前的结论，我们有：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \sum_{i=1}^n(-1)^{i+1}C_n^iU_i &=\sum_{i=1}^n(-1)^{i+1}C_n^i\sum_{j=1}^i(-1)^{j+1}C_i^jS_j \\
+            &= \sum_{i=1}^n\sum_{j=1}^i(-1)^{i+j}C_n^iC_i^jS_j \\
+            &= \sum_{j=1}^nS_j\sum_{i=j}^n(-1)^{i+j}C_n^iC_i^j \\
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+事实上，根据组合数公式，我们有：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            C_n^iC_i^j=\frac{n!}{(n-i)!(i-j)!j!}=C_{n-j}^{i-j}C_n^j
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+故而：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \sum_{i=1}^n(-1)^{i+1}C_n^iU_i &= \sum_{j=1}^nS_j\sum_{i=j}^n(-1)^{i+j}C_{n-j}^{i-j}C_n^j \\
+            &= \sum_{j=1}^nS_jC_n^j\sum_{t=0}^{n-j}(-1)^tC_{n-j}^{t} \\
+            &= \sum_{j=1}^nS_jC_n^j[n=j] \\
+            &= S_n
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+证毕。于是我们得到重要公式，在满足完备对称条件下\textbf{二项式反演}的一般形式:
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            S_n=\sum_{i=1}^n(-1)^{i+1}C_n^iU_i \\
+            U_n=\sum_{i=1}^n(-1)^{i+1}C_n^iS_i
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
 
 \end{document}
