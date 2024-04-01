@@ -324,7 +324,121 @@
 \end{large}
 其中$\mathbf{\Sigma}^+$由将$\mathbf{\Sigma}$中非零元素取倒数后再转置得到。
 
-\subsection{极大似然估计与最小化交叉熵损失}
+\subsection{拉格朗日乘子法与Karush-Kuhn-Tucker条件}
+对于具有连续偏导数的函数$f:\mathbb{R}^m \rightarrow \mathbb{R}$，$g:\mathbb{R}^m \rightarrow \mathbb{R}$，考虑如下约束极值问题：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+           &\max(\min)f(\mathbf{x}) \\
+           &s.t. g(\mathbf{x})=0
+           \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+我们知道拉格朗日乘子法可以帮助我们普适地解决多元函数约束极值问题，而不用依赖于技巧。其描述如下，当$\nabla g_{\mathbf{x}=\mathbf{x}_0}\not = 0$时，点$\mathbf{x}_0$是函数$f(\mathbf{x})$在约束条件$g(\mathbf{x})=0$下的极值点的必要条件是：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\nabla f_{\mathbf{x}=\mathbf{x}_0}=\lambda \nabla g_{\mathbf{x}=\mathbf{x}_0}& \lambda \in \mathbb{R}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+简单推导如下：考虑超曲面$g(\mathbf{x})=0$上的一条曲线$\Gamma$，满足：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &g\left (\Gamma(t)\right )=0& t \in I \\
+            &\Gamma(0)=\mathbf{x_0}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+等式两边关于变量$t$求导可得：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \frac{\partial g}{\partial x_1} \cdot \frac{\partial x_1}{\partial t}+\frac{\partial g}{\partial x_2} \cdot \frac{\partial x_2}{\partial t}+\dots+\frac{\partial g}{\partial x_m} \cdot \frac{\partial x_m}{\partial t}=0
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+也即：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\left ( \nabla g\right )^\top \cdot \frac{\partial \Gamma}{\partial t}=0& t \in I
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+令$t=0$有：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\left ( \nabla g_{\mathbf{x}=\mathbf{x}_0}\right )^\top \cdot \left [ \frac{\partial \Gamma}{\partial t} \right ]_{t=0}=0
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+由于$f\left ( \Gamma(t) \right )$在$t=0$处取得极值，故必有：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \left [\frac{\partial f}{\partial t}\right ]_{t=0}=0
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+也即：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\left ( \nabla f_{\mathbf{x}=\mathbf{x}_0}\right )^\top \cdot \left [ \frac{\partial \Gamma}{\partial t} \right ]_{t=0}=0
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+由于此处曲线$\Gamma$在点$\mathbf{x}_0$处切向量的方向是任意的，故只能：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \nabla g_{\mathbf{x}=\mathbf{x}_0} \parallel \nabla f_{\mathbf{x}=\mathbf{x}_0}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+即可得到结论。同理，考虑如下多约束极值问题：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\max(\min) f(\mathbf{x})& \\
+            &s.t. g^i(\mathbf{x})=0& i=1,2,\dots,k
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+根据上述推导我们可以知道点$\mathbf{x}_0$是该约束问题下的一个极值点的必要条件是：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \nabla f_{\mathbf{x}=\mathbf{x}_0} \in span \left \{ \nabla g_{\mathbf{x}=\mathbf{x}_0}^1,\nabla g_{\mathbf{x}=\mathbf{x}_0}^2,\dots,\nabla g_{\mathbf{x}=\mathbf{x}_0}^k \right \}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+注意此时我们要求这里所有的$\nabla g_{\mathbf{x}=\mathbf{x}_0}^i$必须是\textbf{线性无关的}。
+接下来，我们进一步考虑如下不等式多约束极值问题：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\max(\min) f(\mathbf{x})& \\
+            &s.t. g^i(\mathbf{x}) \le 0& i=1,2,\dots,k
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+首先，如果
 
 \section{算法/基础数学}
 
@@ -878,12 +992,54 @@
         \end{aligned}
     \end{equation}
 \end{large}
-证毕。于是我们得到重要公式，在满足完备对称条件下\textbf{二项式反演}的一般形式:
+证毕。于是我们得到重要公式，在满足完备对称条件下\textbf{二项式反演}的第一种表达形式形式:
 \begin{large}
     \begin{equation}
         \begin{aligned}
             S_n=\sum_{i=1}^n(-1)^{i+1}C_n^iU_i \\
             U_n=\sum_{i=1}^n(-1)^{i+1}C_n^iS_i
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+如果我们设$U_i'=n-U_i$，并且$U_0'=S_0=n$，那么上式也可以被转化为如下形式:
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            S_n=\sum_{i=0}^n(-1)^{i}C_n^iU_i' \\
+            U_n'=\sum_{i=0}^n(-1)^{i}C_n^iS_i
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+
+\subsection{容斥原理与二项式反演的实际应用举例}
+
+容斥原理与二项式反演最重要的作用在于实现组合问题中交集的计数与并集的计数之间的转化，而通常来说二者在计算上的难度并不均等。
+这意味着我们可以实现从较为困难的问题向较为简单的问题的转化，这是十分重要的技巧。作为第一个例子，我们考虑如下问题，已知集合：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            N=\left \{ 1,2,\dots,n \right \}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+考虑选取若干$N$的子集(至少选取一个)，求所选取子集的交集恰好包含$k$个元素的选法数量。通常情况下，“恰好”型问题不会比“至少”型问题更容易解决，
+所以我们容易想到做出如下转化，设$G_k$表示所选取子集的交集至少包含$k$个元素的选法数量，则显而易见答案为：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            answer=G_{k}-G_{k+1}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+接下来我们做出如下思考，如果我们想使用二项式反演解决问题，那么我们必须找到一组满足完备对称条件的集合。所以对于每一个$i\in N$，考虑：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            A_i=\left \{ s|s \subseteq N,i \in s \right \}
             \nonumber
         \end{aligned}
     \end{equation}
