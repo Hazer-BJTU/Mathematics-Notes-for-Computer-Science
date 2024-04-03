@@ -418,7 +418,7 @@
         \end{aligned}
     \end{equation}
 \end{large}
-根据上述推导我们可以知道点$\mathbf{x}_0$是该约束问题下的一个极值点的必要条件是：
+根据上述推导，我们知道任意与所有约束函数$g^i$在点$\mathbf{x}_0$处梯度垂直的向量均必须与函数$f$在点$\mathbf{x}_0$处的梯度垂直，综上所述，点$\mathbf{x}_0$是该约束问题下的一个极值点的必要条件是：
 \begin{large}
     \begin{equation}
         \begin{aligned}
@@ -438,7 +438,27 @@
         \end{aligned}
     \end{equation}
 \end{large}
-首先，如果
+在接下来的论述中，我们以求函数$f$的极大值为例。首先，对于限制条件$g^i(\mathbf{x}) \le 0$，如果函数$f$的极值点$\mathbf{x}_0$位于区域$g^i(\mathbf{x}) < 0$内，则即使该约束条件不存在也不影响$\mathbf{x}_0$处极值点的取得；
+但是如果极值点$\mathbf{x}_0$正好位于该区域的边界上，也即$g^i(\mathbf{x}_0)=0$，那么如果我们去掉该条约束，点$\mathbf{x}_0$可能就不再是函数$f$的极值点了。
+更进一步，对于位于约束区域边界上的极值点，约束$g^i(\mathbf{x}) \le 0$在该点处的梯度必定指向约束区域之外，由于此处我们讨论极大值点，故函数$f$在该点处的梯度必然与$g^i$在该点处的梯度处于\textbf{相同的方向}。
+因为如果二者方向相反，那么位于边界上的点一定不是极大值点，我们可以将该点向约束区域内部平移而使得函数$f$的值增大。我们可以对上述条件进行总结而得到极值点$\mathbf{x}_0$所满足的必要条件：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \left\{\begin{matrix}
+                &\displaystyle{\nabla f_{\mathbf{x}=\mathbf{x}_0}=\sum_{i=1}^{k} \lambda_i \nabla g_{\mathbf{x}=\mathbf{x}_0}^i} & \\
+                & & \\
+                &\lambda_i \ge 0 & i=1,2,\dots,k \\
+                & & \\
+                &g^i(\mathbf{x}_0) \le 0 & i=1,2,\dots,k \\
+                & & \\
+                &\lambda_i g^i(\mathbf{x}_0)=0 & i=1,2,\dots,k
+                \end{matrix}\right.
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+上述条件就是著名的Karush-Kuhn-Tucker条件，简称KKT条件。
 
 \section{算法/基础数学}
 
