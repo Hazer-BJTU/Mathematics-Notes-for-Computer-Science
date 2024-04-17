@@ -1032,11 +1032,45 @@
         \end{aligned}
     \end{equation}
 \end{large}
+二项式反演并不仅仅能应用于实现组合问题中交集计数与并集计数之间的转化。其作为一种普适的数学变换公式，可以被广泛应用于多种计数问题之间的相互转化。
+最为常用的公式如下所示：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &S_k=\sum_{i=k}^n C_i^k U_i \\
+            &U_k=\sum_{i=k}^n (-1)^{i-k} C_i^k S_i
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+需要明确的是，此处的$S_k$，$U_k$不再表示满足完备对称条件的交集组合计数或者并集组合计数，而是可以表示更为普遍的一般序列，其证明是完全同理的：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\sum_{i=k}^n (-1)^{i-k} C_i^k S_i \\
+            &= \sum_{i=k}^n (-1)^{i-k} C_i^k \sum_{j=i}^n C_j^i U_j \\
+            &= \sum_{j=k}^n\sum_{i=k}^j (-1)^{i-k} C_i^k C_j^i U_j \\
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+接着我们令$p=j-k$，$q=i-k$，则上式可以化为：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\sum_{p=0}^{n-k}\sum_{q=0}^{p} (-1)^q C_{q+k}^k C_{p+k}^{q+k} U_{p+k} \\
+            &=\sum_{p=0}^{n-k} C_{p+k}^k U_{p+k} \sum_{q=0}^{p} (-1)^q C_p^q \\
+            &=\sum_{p=0}^{n-k} C_{p+k}^k U_{p+k} \left [ p=0 \right ] \\
+            &= U_k
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
 
 \subsection{容斥原理与二项式反演的实际应用举例}
 
-容斥原理与二项式反演最重要的作用在于实现组合问题中交集的计数与并集的计数之间的转化，而通常来说二者在计算上的难度并不均等。
-这意味着我们可以实现从较为困难的问题向较为简单的问题的转化，这是十分重要的技巧。作为第一个例子，我们考虑如下问题，已知集合：
+容斥原理与二项式反演最重要的作用在于实现组合问题中“钦定”的计数与“恰好”的计数之间的转化，而通常来说二者在计算上的难度并不均等。
+这意味着我们可以实现从较为困难的问题向较为简单的问题的转化，这是十分重要的技巧。作为一个例子，考虑如下问题，已知集合：
 \begin{large}
     \begin{equation}
         \begin{aligned}
@@ -1045,24 +1079,77 @@
         \end{aligned}
     \end{equation}
 \end{large}
-考虑选取若干$N$的子集(至少选取一个)，求所选取子集的交集恰好包含$k$个元素的选法数量。通常情况下，“恰好”型问题不会比“至少”型问题更容易解决，
-所以我们容易想到做出如下转化，设$G_k$表示所选取子集的交集至少包含$k$个元素的选法数量，则显而易见答案为：
+考虑选取若干$N$的子集(至少选取一个)，求所选取子集的交集恰好包含$k$个元素的选法数量。通常情况下，“恰好”型问题不会比“钦定”型问题更容易解决。
+所以我们容易想到做出如下转化，设$S_k$表示在$n$个元素中钦定$k$个元素包含于所有的子集中的选法数量，则显然：
 \begin{large}
     \begin{equation}
         \begin{aligned}
-            answer=G_{k}-G_{k+1}
+            S_k=C_n^k \left (2^{2^{n-k}}-1\right )
             \nonumber
         \end{aligned}
     \end{equation}
 \end{large}
-接下来我们做出如下思考，如果我们想使用二项式反演解决问题，那么我们必须找到一组满足完备对称条件的集合。所以对于每一个$i\in N$，考虑：
+接着我们设$U_i$表示在$n$个元素中恰好有$i$个元素包含于所有的子集中的选法数量，则显然对于$U_i$中的每一种选法，当$i \ge k$时，都会在$S_k$中被重复计算贡献$C_i^k$次，所以我们有：
 \begin{large}
     \begin{equation}
         \begin{aligned}
-            A_i=\left \{ s|s \subseteq N,i \in s \right \}
+            S_k=\sum_{i=k}^{n} C_i^k U_i
             \nonumber
         \end{aligned}
     \end{equation}
 \end{large}
+那么根据二项式反演，我们显然可以得到：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            U_k &= \sum_{i=k}^{n} (-1)^{i-k} C_i^k S_i \\
+            &= \sum_{i=k}^{n} (-1)^{i-k} C_i^k C_n^i \left ( 2^{2^{n-i}}-1 \right )
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+即为所求的答案。值得注意的是，二项式反演并不仅仅能用于“钦定”问题与“恰好”问题之间的转化，我们来看第二个例题，对于排成一排的$n$个方格，使用$m$种颜色进行染色，
+要求每个方格染成一种颜色，且每个方格与其左右相邻的方格（如果存在的话）颜色不能相同，并且要求恰好使用$k$种不同的颜色，$k \le m$，求涂色方法数。一个显然的想法是：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            S_k = C_m^k \cdot k \cdot (k-1)^{n-1}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+那么$S_k$就表示钦定$k$种不同的颜色，使用这$k$种颜色的子集进行涂色的方法数。我们设$U_i$表示恰好使用$i$种不同的颜色进行涂色的方案数，则当$k \ge i$时，
+$U_i$中的每一种情形都在$S_k$中被重复计算贡献$C_{m-i}^{k-i}$次，故我们有：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            S_k = \sum_{i=0}^{k} C_{m-i}^{k-i} U_i
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+我们对上式进行变形以获得二项式反演的形式：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &S_k = \sum_{i=0}^k (-1)^{i} C_k^i (-1)^{i} \cdot \frac{C_m^k}{C_m^i} \cdot U_i \\
+            &C_m^k \cdot k \cdot (k-1)^{n-1} = \sum_{i=0}^k (-1)^{i} C_k^i (-1)^{i} \cdot \frac{C_m^k}{C_m^i} \cdot U_i \\
+            &k(k-1)^{n-1}=\sum_{i=0}^k (-1)^{i} C_k^i \left \{ \frac{(-1)^{i}}{C_m^i}U_i \right \}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+使用二项式反演：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\frac{(-1)^{k}}{C_m^k} U_k = \sum_{i=0}^k (-1)^{i} i(i-1)^{n-1} \\
+            &U_k = C_m^k \sum_{i=0}^k (-1)^{k-i} i(i-1)^{n-1}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+
+
 
 \end{document}
