@@ -7,6 +7,7 @@
 \usepackage{tikz}
 \usepackage{algorithm}
 \usepackage{algorithmic}
+\usepackage{microtype}
 \usetikzlibrary{cd}
 
 \geometry{a4paper,scale=0.75} %设置页边距
@@ -459,6 +460,170 @@
     \end{equation}
 \end{large}
 上述条件就是著名的Karush-Kuhn-Tucker条件，简称KKT条件。
+
+\subsection{PCA主成分分析}
+我们考虑$\mathbb{R}^d$空间中的一组样本$\mathbf{X}=(\mathbf{x}_1,\mathbf{x}_2,\dots,\mathbf{x}_n)$，如何使用一个超平面对所有的样本进行恰当的表达？PCA主成分分析通常从\textbf{最近重构性}：使样本点到超平面的距离都足够近，也即
+样本点投影至超平面后与原空间中的位置尽可能接近；以及\textbf{最大可分性}：即样本点在超平面上的投影尽可能分散，这样两个角度去考虑，而事实上这两种考虑是等价的。假设$\left \{ \mathbf{w}_1,\mathbf{w}_2,\dots,\mathbf{w}_d \right \}$
+是$\mathbb{R}^d$空间中的一组标准正交基，满足：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{w}_i^\top \mathbf{w}_j = 
+            \left\{\begin{matrix}
+                & 1 & i=j \\
+                & & \\
+                & 0 & i \not = j 
+                \end{matrix}\right.
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+则矩阵$\mathbf{W}=(\mathbf{w}_1,\mathbf{w}_2,\dots,\mathbf{w}_d)$是\textbf{正交矩阵}，我们有：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+                &\mathbf{W}^\top\mathbf{W}=\begin{bmatrix}
+                \mathbf{w}_1^\top\mathbf{w}_1 & \mathbf{w}_1^\top\mathbf{w}_2 & \cdots  & \mathbf{w}_1^\top\mathbf{w}_d \\
+                \mathbf{w}_2^\top\mathbf{w}_1 & \mathbf{w}_2^\top\mathbf{w}_2 &  & \vdots  \\
+                \vdots  &  & \ddots  & \vdots  \\
+                \mathbf{w}_d^\top\mathbf{w}_1 & \cdots  & \cdots  & \mathbf{w}_d^\top\mathbf{w}_d
+                \end{bmatrix}
+                =\mathbf{E}_{d\times d} \\
+                &\mathbf{W}\mathbf{W}^\top=\sum_{i=1}^{d} \mathbf{w_i}\mathbf{w_i}^\top=\mathbf{W}^\top\mathbf{W}=\mathbf{E}_{d\times d}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+这是因为：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{W}^\top\mathbf{W}=\mathbf{E} \Rightarrow \mathbf{W}^\top=\mathbf{W}^{-1} \Rightarrow \mathbf{W}\mathbf{W}^\top=\mathbf{E}
+        \end{aligned}
+    \end{equation}
+\end{large}
+接下来我们考虑对样本$\mathbf{X}$进行降维，令投影向量：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{z}_{g}=\mathbf{E}_{g \times d}^* \cdot \mathbf{W}_{d\times d}^\top \cdot \mathbf{x}_{d}
+        \end{aligned}
+    \end{equation}
+\end{large}
+其中$g \ll d$，并且：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{E}_{g\times d}^*=\begin{bmatrix}
+            \mathbf{E}_{g\times g} & \mathbf{O}_{g\times (d-g)}
+            \end{bmatrix}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+则重构向量的计算公式如下：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \hat{\mathbf{x}}_i=\mathbf{W} \left(\mathbf{E}^*\right)^\top \mathbf{z}_i = \mathbf{W}(\mathbf{E}^*)^2\mathbf{W}^\top \mathbf{x}_i
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+对于一个矩阵$\mathbf{A}$，我们计算其Frobenius范数：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \left\| \mathbf{A} \right\|_F=\sqrt{\sum_{i=1}^{m}\sum_{j=1}^{n}\mathbf{A}_{i,j}^2}=\sqrt{\sum_{j=1}^{n} \left\| \mathbf{A}_j \right\|_2^2 }=\sqrt{\sum_{i=1}^{m} \left\| \mathbf{A}_i \right\|_2^2 }
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+我们知道：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{A}\mathbf{A}^\top=\sum_{j=1}^{n}\mathbf{A_j}\mathbf{A_j}^\top
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+而我们又有：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathrm{tr}(\mathbf{A_j}\mathbf{A_j}^\top)=\left\| \mathbf{A}_j \right\|_2^2
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+故综上所述：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \left\| \mathbf{A} \right\|_F = \sqrt{\mathrm{tr}(\mathbf{A}\mathbf{A}^\top)}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+接着我们考虑\textbf{最近重构性}条件，要求最小化下式：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \sum_{i=1}^{n} \left\| \hat{\mathbf{x}}_i - \mathbf{x}_i \right\|_2^2
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+根据Frobenius范数的性质，显然有：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \sum_{i=1}^{n} \left\| \hat{\mathbf{x}}_i - \mathbf{x}_i \right\|_2^2 &= \sum_{i=1}^{n} \left( \mathbf{W}(\mathbf{E}^*)^2\mathbf{W}^\top \mathbf{x}_i - \mathbf{x}_i \right)^\top \left( \mathbf{W}(\mathbf{E}^*)^2\mathbf{W}^\top \mathbf{x}_i - \mathbf{x}_i \right) \\
+            &= -\sum_{i=1}^{n} \mathbf{x}_i^\top \mathbf{W}(\mathbf{E}^*)^2\mathbf{W}^\top \mathbf{x}_i + \sum_{i=1}^{n} \mathbf{x_i}^\top \mathbf{x_i} \\
+            &= -\left\| \mathbf{E}^*\mathbf{W}^\top \mathbf{X} \right\|_F^2 + \sum_{i=1}^{n} \mathbf{x_i}^\top \mathbf{x_i} \\
+            &= -\mathrm{tr}\left( \mathbf{E}^*\mathbf{W}^\top \mathbf{X}\mathbf{X}^\top \mathbf{W} (\mathbf{E}^*)^\top \right) + \sum_{i=1}^{n} \mathbf{x_i}^\top \mathbf{x_i}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+此处我们使用$\mathbf{W}_{d\times g}$来代替$\mathbf{W}_{d\times d}(\mathbf{E}^*)^\top_{d\times g}$，即只从标准正交基中选取前$g$个保留，即可得到最终的优化目标：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathrm{max} \left\{ \mathrm{tr}\left( \mathbf{W}^\top\mathbf{X}\mathbf{X}^\top\mathbf{W} \right) \right\}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+注意到此时组成$\mathbf{W}$的向量$\left\{\mathbf{w}_1,\mathbf{w}_2,\dots,\mathbf{w}_g \right\}$仍然是标准正交的，故我们得到约束条件：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{W}^\top\mathbf{W}=\mathbf{E}_{g\times g}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+我们使用拉格朗日乘子法，设拉格朗日量:
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            L=\mathrm{tr}\left(\mathbf{W}^\top \mathbf{X}\mathbf{X}^\top \mathbf{W} \right) - \lambda \left( \mathbf{W}^\top\mathbf{W} - \mathbf{E} \right)
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+令$L$关于$\mathbf{W}$的导数为$O$可得：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\frac{\partial L}{\partial \mathbf{W}} = 2\mathbf{W}^\top \mathbf{X} \mathbf{X}^\top - 2\lambda \mathbf{W}^\top = \mathbf{O} \\
+            &\Rightarrow \mathbf{X}\mathbf{X}^\top \mathbf{W} = \lambda \mathbf{W}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
 
 \section{算法/基础数学}
 
