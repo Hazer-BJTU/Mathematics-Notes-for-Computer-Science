@@ -6,8 +6,8 @@
 \contentsline {subsection}{\numberline {0.1.5}PCA主成分分析}{9}{}%
 \contentsline {section}{\numberline {0.2}算法/基础数学}{11}{}%
 \contentsline {subsection}{\numberline {0.2.1}离散傅里叶变换DFT与快速傅里叶变换FFT}{11}{}%
-\contentsline {subsection}{\numberline {0.2.2}傅里叶变换}{14}{}%
-\contentsline {section}{\numberline {0.3}算法竞赛中的数论与组合数学}{17}{}%
-\contentsline {subsection}{\numberline {0.3.1}容斥原理与二项式反演}{17}{}%
-\contentsline {subsection}{\numberline {0.3.2}容斥原理与二项式反演的实际应用举例}{20}{}%
+\contentsline {subsection}{\numberline {0.2.2}傅里叶变换}{15}{}%
+\contentsline {section}{\numberline {0.3}算法竞赛中的数论与组合数学}{18}{}%
+\contentsline {subsection}{\numberline {0.3.1}容斥原理与二项式反演}{18}{}%
+\contentsline {subsection}{\numberline {0.3.2}容斥原理与二项式反演的实际应用举例}{21}{}%
 \contentsline {subsection}{\numberline {0.3.3}生成函数及其实际应用举例}{22}{}%

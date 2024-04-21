@@ -605,25 +605,38 @@
         \end{aligned}
     \end{equation}
 \end{large}
-我们使用拉格朗日乘子法，设拉格朗日量:
+我们使用拉格朗日乘子法，可得:
 \begin{large}
     \begin{equation}
         \begin{aligned}
-            L=\mathrm{tr}\left(\mathbf{W}^\top \mathbf{X}\mathbf{X}^\top \mathbf{W} \right) - \lambda \left( \mathbf{W}^\top\mathbf{W} - \mathbf{E} \right)
+            &\frac{\partial \mathrm{tr}\left( \mathbf{W}^\top\mathbf{X}\mathbf{X}^\top\mathbf{W} \right)}{\partial \mathbf{W}}
+            = 2\mathbf{W}^\top\mathbf{X}\mathbf{X}^\top \\
+            &\frac{\partial (\mathbf{W}\mathbf{E}_i)^\top(\mathbf{W}\mathbf{E}_i)}{\partial \mathbf{W}} = 2\mathbf{E}_i\mathbf{W}^\top
             \nonumber
         \end{aligned}
     \end{equation}
 \end{large}
-令$L$关于$\mathbf{W}$的导数为$O$可得：
+故综上所述，有：
 \begin{large}
     \begin{equation}
         \begin{aligned}
-            &\frac{\partial L}{\partial \mathbf{W}} = 2\mathbf{W}^\top \mathbf{X} \mathbf{X}^\top - 2\lambda \mathbf{W}^\top = \mathbf{O} \\
-            &\Rightarrow \mathbf{X}\mathbf{X}^\top \mathbf{W} = \lambda \mathbf{W}
+            \mathbf{W}^\top\mathbf{X}\mathbf{X}^\top = \sum_{i=1}^{g} \lambda_i \mathbf{E}_i\mathbf{W}^\top = \mathbf{\Lambda}_{g\times g} \mathbf{W}^\top
             \nonumber
         \end{aligned}
     \end{equation}
 \end{large}
+等式两边同时取转置可知：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\mathbf{X}\mathbf{X}^\top\mathbf{W} = \mathbf{W}\mathbf{\Lambda} \\
+            &\mathrm{tr}\left(\mathbf{W}^\top\mathbf{X}\mathbf{X}^\top\mathbf{W} \right) = \sum_{i=1}^{g}\lambda_i
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+所以显然矩阵$\mathbf{W}$由矩阵$\mathbf{X}\mathbf{X}^\top$的部分特征向量构成(详见SVD奇异值分解)，为了尽可能最大化目标函数，我们可以选取最大的$g$个特征值所对应的特征向量。
+不难发现目标函数其实就是被投影后样本点的方差，最大化目标函数就是使得被投影后的样本点之间尽可能地远离。所以由此可知，\textbf{最近重构性}原理与\textbf{最大可分性}原理在本质上是等价的。
 
 \section{算法/基础数学}
 
