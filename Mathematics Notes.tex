@@ -637,6 +637,70 @@
 \end{large}
 所以显然矩阵$\mathbf{W}$由矩阵$\mathbf{X}\mathbf{X}^\top$的部分特征向量构成(详见SVD奇异值分解)，为了尽可能最大化目标函数，我们可以选取最大的$g$个特征值所对应的特征向量。
 不难发现目标函数其实就是被投影后样本点的方差，最大化目标函数就是使得被投影后的样本点之间尽可能地远离。所以由此可知，\textbf{最近重构性}原理与\textbf{最大可分性}原理在本质上是等价的。
+不仅如此，我们还可以将\textbf{核技巧}应用于PCA以增强其非线性表达能力，具体而言，考虑映射：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \phi : \mathbf{x}_i \mapsto \mathbf{y}_i
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+则拉格朗日乘子法的解会转化为如下形式：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\mathbf{Y}\mathbf{Y}^\top \mathbf{W} = \mathbf{W}\mathbf{\Lambda} \\
+            &\Rightarrow \mathbf{W} = \mathbf{Y}\mathbf{Y}^\top \mathbf{W} \mathbf{\Lambda}^{-1}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+我们设：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\mathbf{Y}^\top\mathbf{W}\mathbf{\Lambda}^{-1} = \mathbf{A} \\
+            &\Rightarrow \mathbf{W} = \mathbf{Y}\mathbf{A}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+于是回带上式，我们有：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{Y}\mathbf{Y}^\top\mathbf{Y}\mathbf{A}=\mathbf{Y}\mathbf{A}\mathbf{\Lambda}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+我们尝试使用核矩阵$\mathbf{K}=\mathbf{Y}^\top\mathbf{Y}$来表达上式：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{Y}\mathbf{K}\mathbf{A} = \mathbf{Y}\mathbf{A}\mathbf{\Lambda}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+于是我们可以类比之前讨论过的情况，使用核矩阵$\mathbf{K}$的最大的$g$个特征值所对应的特征向量构成矩阵$\mathbf{A}$即可，对于新样本$\mathbf{x}$的投影计算如下：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{W}^\top \phi(\mathbf{x}) &= \mathbf{A}^\top\mathbf{Y}^\top\phi(\mathbf{x}) \\
+            &= \mathbf{A}^\top
+            \begin{bmatrix}
+                \kappa (\mathbf{x}_1,\mathbf{x}) \\
+                \kappa (\mathbf{x}_2,\mathbf{x}) \\
+                 \vdots  \\
+                \kappa (\mathbf{x}_n,\mathbf{x})
+            \end{bmatrix}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+
 
 \section{算法/基础数学}
 
