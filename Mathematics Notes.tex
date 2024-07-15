@@ -162,7 +162,260 @@
         \end{aligned}
     \end{equation}
 \end{large}
-        
+
+\subsection{矩阵的求导方法}
+对于矩阵函数$\mathbf{F}: \mathbb{R}^{n\times m} \rightarrow \mathbb{R}, \mathbf{X} \mapsto \mathbf{F}(\mathbf{X})$，我们定义其导数具有如下形式：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \frac{\partial \mathbf{F}}{\partial \mathbf{X}} = \begin{bmatrix}
+            \frac{\partial \mathbf{F}}{\partial \mathbf{X}}_{1,1} & \frac{\partial \mathbf{F}}{\partial \mathbf{X}}_{1,2} & \dots & \frac{\partial \mathbf{F}}{\partial \mathbf{X}}_{1,m}\\
+            \frac{\partial \mathbf{F}}{\partial \mathbf{X}}_{2,1} & \frac{\partial \mathbf{F}}{\partial \mathbf{X}}_{2,2}  &  & \vdots \\
+            \vdots  &  & \ddots & \vdots \\
+            \frac{\partial \mathbf{F}}{\partial \mathbf{X}}_{n,1} & \dots & \dots & \frac{\partial \mathbf{F}}{\partial \mathbf{X}}_{n,m} \\
+            \end{bmatrix}^\top
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+于是根据上述定义我们可以求出下述常见函数的导数，首先是二次型：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{F}=\mathbf{x}^\top\mathbf{A}\mathbf{x}=\sum_{i=1}^{n}\sum_{j=1}^{n}\mathbf{A}_{i,j}x_ix_j
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+我们考虑如下偏导数：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\frac{\partial \mathbf{F}}{\partial \mathbf{A}_{i,j}}=x_ix_j \\
+            &\frac{\partial \mathbf{F}}{\partial x_k}=\frac{\partial}{\partial x_k} \left[ \mathbf{A}_{k,k}x_k^2 + \sum_{i=1,i\not = k}^{n}\mathbf{A}_{i,k}x_ix_k + \sum_{j=1,j\not = k}^{n}\mathbf{A}_{k,j}x_kx_j + const \right] \\
+            &\frac{\partial \mathbf{F}}{\partial x_k}=2\mathbf{A}_{k,k}x_k + \sum_{i=1,i\not = k}^{n}\mathbf{A}_{i,k}x_i + \sum_{j=1,j\not = k}^{n}\mathbf{A}_{k,j}x_j = \sum_{i=1}^{n}\left( \mathbf{A}_{i,k} + \mathbf{A}_{k,i} \right)x_i \\
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+故显然，我们可以得到：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\frac{\partial \mathbf{F}}{\partial \mathbf{A}} = \left(\mathbf{x}\mathbf{x}^\top \right)^\top = \mathbf{x}\mathbf{x}^\top \\
+            &\frac{\partial \mathbf{F}}{\partial \mathbf{x}} = \left[ \left( \mathbf{A}+\mathbf{A}^\top \right) \mathbf{x} \right]^\top = \mathbf{x}^\top \left( \mathbf{A}+\mathbf{A}^\top \right)
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+接下来我们考虑如下函数：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\mathbf{F}=\mathrm{tr}\left( \mathbf{A}\mathbf{A}^\top \right)=\sum_{i=1}^{n}\sum_{j=1}^{m}\mathbf{A}_{i,j}^2 \\
+            &\frac{\partial \mathbf{F}}{\partial \mathbf{A}_{i,j}} = 2\mathbf{A}_{i,j} \\
+            &\Rightarrow \frac{\partial \mathbf{F}}{\partial \mathbf{A}}=2\mathbf{A}^\top
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+到目前为止我们还是考虑简单矩阵-标量函数的导数，接下来我们要讨论复合函数的求导方法，假设我们有如下矩阵-标量函数：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{F}:\mathbb{R}^{n\times m} \rightarrow \mathbb{R},\mathbf{U} \mapsto \mathbf{F}\left( \mathbf{U} \right)
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+考虑$\mathbf{U}$是一个满足如下条件的矩阵-矩阵函数：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\mathbf{U}:\mathbb{R}^{p\times q} \rightarrow \mathbb{R}^{n\times m},\mathbf{X} \mapsto \mathbf{U}\left( \mathbf{X} \right) \\
+            &\mathbf{U}_{i,j}:\mathbb{R}^{p\times q}\rightarrow \mathbb{R},\mathbf{X} \mapsto \mathbf{U}_{i,j}\left( \mathbf{X} \right)
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+于是我们做出如下考虑：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\frac{\partial \mathbf{F}}{\partial \mathbf{X}_{i,j}} = \sum_{k=1}^{n}\sum_{l=1}^{m} \frac{\partial\mathbf{F}}{\partial \mathbf{U}_{k,l}} \cdot \frac{\partial \mathbf{U}_{k,l}}{\partial \mathbf{X}_{i,j}} \\
+            &\left[\frac{\partial \mathbf{F}}{\partial \mathbf{U}}\right]_{i,j} = \frac{\partial \mathbf{F}}{\partial \mathbf{U}_{j,i}} \\
+            &\left[\frac{\partial \mathbf{U}}{\partial \mathbf{X}}\right]_{k,l,i,j} = \frac{\partial \mathbf{U}_{k,l}}{\partial \mathbf{X}_{j,i}} \\
+            &\left[ \frac{\partial \mathbf{F}}{\partial \mathbf{X}} \right]_{i,j}=\frac{\partial \mathbf{F}}{\partial \mathbf{U}_{j,i}}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+故我们有：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \left[\frac{\partial \mathbf{F}}{\partial \mathbf{X}}\right]_{i,j}=\sum_{k=1}^{n}\sum_{l=1}^{m}\left[\frac{\partial \mathbf{F}}{\partial \mathbf{U}}\right]_{l,k} \cdot \left[ \frac{\partial \mathbf{U}}{\partial \mathbf{X}} \right]_{k,l,i,j}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+于是我们考虑如下几种特殊情形，首先是最简单的$\mathbf{U}=\mathbf{W}\mathbf{X}+\mathbf{B}$，此时$q=m$：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\mathbf{U}_{k,l}=\sum_{u=1}^{p}\mathbf{W}_{k,u}\mathbf{X}_{u,l}+\mathbf{B}_{k,l} \\
+            &\left[ \frac{\partial \mathbf{U}}{\partial \mathbf{X}}\right]_{k,l,i,j}=[l=i]\mathbf{W}_{k,j} \\
+            &\left[ \frac{\partial \mathbf{F}}{\partial \mathbf{X}} \right]_{i,j}=\sum_{k=1}^{n} \left[ \frac{\partial \mathbf{F}}{\partial \mathbf{U}} \right]_{i,k} \cdot \mathbf{W}_{k,j} \\
+            &\Rightarrow \frac{\partial \mathbf{F}}{\partial \mathbf{X}} = \frac{\partial \mathbf{F}}{\partial \mathbf{U}} \cdot \mathbf{W}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+接下来我们考虑按位操作函数$\mathbf{U}=f\left(\mathbf{X}\right)$，此时$p=n,q=m$，显然我们有：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            &\mathbf{U}_{i,j}=f(\mathbf{X}_{i,j}) \\
+            &\left[ \frac{\partial \mathbf{U}}{\partial \mathbf{X}} \right]_{k,l,i,j}=[l=i][k=j]f'(\mathbf{X}_{j,i}) \\
+            &\left[ \frac{\partial \mathbf{F}}{\partial \mathbf{X}} \right]_{i,j}=\left[ \frac{\partial \mathbf{F}}{\partial \mathbf{U}} \right]_{i,j} \cdot f'(\mathbf{X}_{j,i}) \\
+            &\Rightarrow \frac{\partial \mathbf{F}}{\partial \mathbf{X}}=\frac{\partial \mathbf{F}}{\partial \mathbf{U}} \odot f'\left(\mathbf{X}^\top\right)
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+接下来我们将以一个著名的例子辅助讲解，那就是高维正态分布的极大似然估计推导。我们假设随机变量$\mathbf{X} \sim N(\mu, \Sigma)$，$\mathbf{x_1}, \mathbf{x_2}, \dots, \mathbf{x_n}$是总体的一组样本，满足独立同分布条件。
+高维正态分布的概率密度函数如下所示：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            f(\mathbf{x},\mu,\Sigma)=\frac{1}{(2\pi)^{\frac{n}{2}}\left| \Sigma \right|^{\frac{1}{2}}}\exp \left\{ -\frac{1}{2}(\mathbf{x}-\mu)^\top \Sigma^{-1} (\mathbf{x}-\mu) \right\}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+其中$\Sigma$是协方差矩阵：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \Sigma = \begin{bmatrix}
+            \sigma_1^2 & \rho_{1,2}\sigma_1\sigma_2 & \dots & \rho_{1,n}\sigma_1\sigma_n\\
+            \rho_{1,2}\sigma_2\sigma_1 & \sigma_2^2  &  & \vdots \\
+            \vdots &  & \ddots & \vdots \\
+            \rho_{1,n}\sigma_n\sigma_1 & \dots & \dots & \sigma_n^2 \\
+            \end{bmatrix}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+它是一个实对称矩阵。接下来我们考虑对数似然函数：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \ln(L) &= \ln \prod_{i=1}^{n} f(\mathbf{x}_i,\mu, \Sigma) \\
+            &= \sum_{i=1}^{n} \ln f(\mathbf{x}_i, \mu, \Sigma) \\
+            &= -\frac{n^2}{2}\ln (2\pi) - \frac{n}{2} \ln (\left| \Sigma \right|) - \frac{1}{2}\sum_{i=1}^{n}(\mathbf{x}_i-\mu)^\top\Sigma^{-1}(\mathbf{x}_i-\mu)
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+根据上述求导公式，我们知道：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \frac{\partial \ln(L)}{\partial \mu} = \sum_{i=1}^{n} (\mathbf{x}_i-\mu)^\top \Sigma^{-1}=\mathbf{o}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+于是不难得到：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \hat{\mu}=\frac{1}{n}\sum_{i=1}^{n}\mathbf{x}_i=\bar{\mathbf{x}}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+接下来我们考虑对$\Sigma$进行求导，首先考虑第二项：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \frac{\partial \ln (\left| \Sigma \right|)}{\partial \Sigma_{i,j}}=\frac{A_{i,j}}{\left| \Sigma \right|}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+其中$A_{i,j}$是$\Sigma$矩阵中第i行第j列的元素所对应的代数余子式，所以不难发现：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \frac{\partial \ln (\left| \Sigma \right|)}{\partial \Sigma} = (\Sigma^{-1})^\top = \Sigma^{-1}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+接下来我们考虑对数似然函数中的第三项：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \frac{\partial (\mathbf{x}_i-\mu)^\top\Sigma^{-1}(\mathbf{x}_i-\mu)}{\partial \Sigma_{i,j}} &= (\mathbf{x}_i-\mu)^\top\frac{\partial \Sigma^{-1}}{\partial \Sigma_{i,j}}(\mathbf{x}_i-\mu)
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+其中：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \frac{\partial \Sigma^{-1}}{\partial \Sigma_{i,j}} &= \lim_{\Delta \sigma_{i,j}\rightarrow 0}\frac{(\Sigma+\Delta\Sigma_{i,j})^{-1}-\Sigma^{-1}}{\Delta \sigma_{i,j}} \\
+            &= \lim_{\Delta \sigma_{i,j}\rightarrow 0}\frac{(\Sigma+\Delta\Sigma_{i,j})^{-1}\Sigma\Sigma^{-1}-(\Sigma+\Delta\Sigma_{i,j})^{-1}(\Sigma+\Delta\Sigma_{i,j})\Sigma^{-1}}{\Delta \sigma_{i,j}} \\
+            &= \lim_{\Delta \sigma_{i,j}\rightarrow 0}(\Sigma+\Delta\Sigma_{i,j})^{-1}\frac{\Sigma-(\Sigma+\Delta\Sigma_{i,j})}{\Delta \sigma_{i,j}}\Sigma^{-1} \\
+            &= -\lim_{\Delta \sigma_{i,j}\rightarrow 0}(\Sigma+\Delta\Sigma_{i,j})^{-1}\frac{\Delta\Sigma_{i,j}}{\Delta \sigma_{i,j}}\Sigma^{-1} \\
+            &= -\Sigma^{-1} E_{i,j} \Sigma^{-1} \\
+            &= -\Sigma^{-1} E_{i} E_{j}^\top \Sigma^{-1}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+故回带上式我们可以得到：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            (\mathbf{x}_i-\mu)^\top\frac{\partial \Sigma^{-1}}{\partial \Sigma_{i,j}}(\mathbf{x}_i-\mu) &= -(\mathbf{x}_i-\mu)^\top \Sigma^{-1} E_{i} E_{j}^\top \Sigma^{-1} (\mathbf{x}_i-\mu) \\
+            &= -\left[E_{i}^\top \Sigma^{-1} (\mathbf{x}_i-\mu) \right]^\top E_{j}^\top \Sigma^{-1} (\mathbf{x}_i-\mu)
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+所以不难发现：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            (\mathbf{x}_i-\mu)^\top\frac{\partial \Sigma^{-1}}{\partial \Sigma}(\mathbf{x}_i-\mu) &= -\left[ \Sigma^{-1}(\mathbf{x}_i-\mu) \right] \left[ \Sigma^{-1}(\mathbf{x}_i-\mu) \right]^\top \\
+            &= -\Sigma^{-1}(\mathbf{x}_i-\mu)(\mathbf{x}_i-\mu)^\top \Sigma^{-1}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+所以综上所述：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \frac{\partial \ln (L)}{\partial \Sigma} = -\frac{n}{2}\Sigma^{-1} + \frac{1}{2}\sum_{i=1}^{n} \Sigma^{-1}(\mathbf{x}_i-\mu)(\mathbf{x}_i-\mu)^\top\Sigma^{-1}=\mathbf{O}
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+最终我们可以得到：
+\begin{large}
+    \begin{equation}
+        \begin{aligned}
+            \hat{\Sigma}=\frac{1}{n}\sum_{i=1}^{n}(\mathbf{x}_i-\mu)(\mathbf{x}_i-\mu)^\top
+            \nonumber
+        \end{aligned}
+    \end{equation}
+\end{large}
+于是我们便完成了高维正态分布极大似然估计的推导。
 
 \subsection{线性回归模型的解析解}
 一般的线性模型可以被描述为以下形式，其中 $\hat{y}\in \mathbb{R}, \mathbf{x}\in \mathbb{R}^d, \mathbf{w}\in \mathbb{R}^d$ :
@@ -499,6 +752,7 @@
     \begin{equation}
         \begin{aligned}
             \mathbf{W}^\top\mathbf{W}=\mathbf{E} \Rightarrow \mathbf{W}^\top=\mathbf{W}^{-1} \Rightarrow \mathbf{W}\mathbf{W}^\top=\mathbf{E}
+            \nonumber
         \end{aligned}
     \end{equation}
 \end{large}
@@ -507,6 +761,7 @@
     \begin{equation}
         \begin{aligned}
             \mathbf{z}_{g}=\mathbf{E}_{g \times d}^* \cdot \mathbf{W}_{d\times d}^\top \cdot \mathbf{x}_{d}
+            \nonumber
         \end{aligned}
     \end{equation}
 \end{large}
@@ -700,6 +955,9 @@
         \end{aligned}
     \end{equation}
 \end{large}
+
+
+\subsection{SVM支持向量机}
 
 
 \section{算法/基础数学}
